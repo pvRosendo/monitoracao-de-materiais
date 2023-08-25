@@ -2,8 +2,12 @@
 #include "sensorDHT11.hpp"
 
 void setup() {
-  Serial.begin(9600); //INICIALIZA A SERIAL
-  delay(2000); //INTERVALO DE 2 SEGUNDO ANTES DE INICIAR
+
+  // Inicializa o monitor serial (necessário para podermos usar "Serial.print")
+  Serial.begin(9600);
+
+  // Determina um intervalo de 2 segundos antes de iniciar o código
+  delay(2000);
 }
 
 void loop() {
@@ -13,10 +17,14 @@ void loop() {
 
   // Imprime o valor da Umidade
   Serial.print("Umidade: ");
-  Serial.print(DHT.humidity); 
-  Serial.print("%"); //ESCREVE O TEXTO EM SEGUIDA
-  Serial.print(" / Temperatura: "); //IMPRIME O TEXTO NA SERIAL
-  Serial.print(DHT.temperature, 0); //IMPRIME NA SERIAL O VALOR DE UMIDADE MEDIDO E REMOVE A PARTE DECIMAL
-  Serial.println("*C"); //IMPRIME O TEXTO NA SERIAL
-  delay(2000); //INTERVALO DE 2 SEGUNDOS * NÃO DIMINUIR ESSE VALOR
+  Serial.print(DHT.humidity); // Imprime o valor da umidade 
+  Serial.print("%"); // Adiciona o símbolo de porcentagem para representar a umidade
+  
+  // Imprime o valor da Temperatura
+  Serial.print(" / Temperatura: ");
+  Serial.print(DHT.temperature, 0); // Imprime o valor da temperatura e retira a parte decimal
+  Serial.println("*C"); // Adiciona o símbolo de graus Celsius
+  
+  // Adiciona um intervalo de 2 segundos - não diminuir esse valor
+  delay(2000);
 }

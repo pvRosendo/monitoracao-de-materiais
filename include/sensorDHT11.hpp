@@ -1,5 +1,7 @@
 #include <dht.h>
 
-const int pinoDHT11 = A2; //PINO ANALÓGICO UTILIZADO PELO DHT11
- 
-dht DHT; //VARIÁVEL DO TIPO DHT
+// Definição do pino analógico utilizado pelo sensor DHT11
+const int pinoDHT11 = A2;
+
+// Instanciando o objeto do tipo DHT
+dht DHT;
