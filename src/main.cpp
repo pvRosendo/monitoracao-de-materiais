@@ -9,7 +9,7 @@
 // Importando os arquivos necessários
 #include <Arduino.h>
 #include "sensores_DHT.hpp"
-#include "sensorGuva-S12SD.hpp"
+#include "sensor_UV.hpp"
 
 
 /**
@@ -25,12 +25,12 @@ void setup() {
   iniciar_sensor_UV();
 
   // Inicializa os sensores DHT
-  // dht1.begin();
+  dht1.begin();
   // dht2.begin();
   // dht3.begin();
 
   // Iniciando os sensores de Umidade e Temperatura
-  // iniciar_sensores_DHT(sensor_DHT_de_fora,    "Sensor de Fora",     1);
+  iniciar_sensores_DHT(sensor_DHT_de_fora,    "Sensor de Fora",     1);
   // iniciar_sensores_DHT(sensor_DHT_de_dentro1, "Sensor de Dentro 1", 2);
   // iniciar_sensores_DHT(sensor_DHT_de_dentro2, "Sensor de Dentro 2", 3);
 
@@ -44,15 +44,16 @@ void setup() {
 */
 void loop() {
 
+  delay(2000);
   // Chama as funções de leitura dos sensores de Umidade e Temperatura
-  // leitura_dos_sensores_DHT(evento_DHT_de_fora,    "Sensor de Fora",     1);
+  leitura_dos_sensores_DHT(evento_DHT_de_fora,    "Sensor de Fora",     1);
   // leitura_dos_sensores_DHT(evento_DHT_de_dentro1, "Sensor de Dentro 1", 2);
   // leitura_dos_sensores_DHT(evento_DHT_de_dentro2, "Sensor de Dentro 2", 3);
 
   // Chama a função de leitura do sensor de UV
-  ler_sensor_UV();
+  // ler_sensor_UV();
 
-  Serial.println(nivel_uv);
+  // Serial.println(nivel_uv);
 }
 
 
