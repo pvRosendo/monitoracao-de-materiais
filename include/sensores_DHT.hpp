@@ -11,15 +11,10 @@
 
 // Dependendo do tipo, selecione um sensor retirando o comentário (duas barras "//") da linha correspondente
 
-// Se os sensores forem do tipo DHT11, temos as definições para os 3 sensores
-#define DHTTYPE1    DHT11                           // Sensor DHT11
-#define DHTTYPE2    DHT11                           // Sensor DHT11
-#define DHTTYPE3    DHT11                           // Sensor DHT11
-
-// Para o caso de serem DHT22, temos as definições para os 3 sensores
-// #define DHTTYPE1     DHT22                       // Sensor DHT22 ou AM2302
-// #define DHTTYPE2     DHT22                       // Sensor DHT22 ou AM2302
-// #define DHTTYPE3     DHT22                       // Sensor DHT22 ou AM2302
+// Se os sensores forem do tipo DHT11
+#define DHTTYPE1     DHT11                       // Sensor DHT11
+#define DHTTYPE2     DHT22                       // Sensor DHT22
+#define DHTTYPE3     DHT22                       // Sensor DHT22
 
 // Definição dos pinos que serão utilizados para os sensores
 #define DHTPIN1 2
@@ -30,9 +25,11 @@
 DHT dht1(DHTPIN1, DHTTYPE1);
 DHT_Unified informacoes_dht1(DHTPIN1, DHTTYPE1);
 
+DHT dht2(DHTPIN2, DHTTYPE2);
+DHT_Unified informacoes_dht2(DHTPIN2, DHTTYPE2);
 
-DHT_Unified dht2(DHTPIN2, DHTTYPE2);
-DHT_Unified dht3(DHTPIN3, DHTTYPE3);
+DHT dht3(DHTPIN3, DHTTYPE3);
+DHT_Unified informacoes_dht3(DHTPIN3, DHTTYPE3);
 
 
 // Tempo de atraso para leitura do sensor
@@ -48,116 +45,243 @@ sensors_event_t evento_DHT_de_fora;
 sensors_event_t evento_DHT_de_dentro1;
 sensors_event_t evento_DHT_de_dentro2;
 
-/**
- * @brief Função responsável por iniciar os sensores DHT e pegar as informações básicas
- * @param sensor Objeto sensor_t que armazena as informações básicas do sensor
- * @param nome_sensor String que armazena nome do sensor que está sendo iniciado
- * @param numero_sensor Inteiro que armazena qual o número do sensor que está sendo iniciado
-*/
-void iniciar_sensores_DHT(sensor_t sensor, String nome_sensor, int numero_sensor) {
+// Classe exclusiva para manter os métodos de impressão de dados
+class impressaoDadosSensorDHT {
 
-    // Imprime qual o sensor que está sendo iniciado
-    Serial.println("Iniciando o ");
-    Serial.print(nome_sensor);
+    protected:
 
-    if(numero_sensor == 1) {
-        // Coleta e imprime as informações básicas de temperatura do sensor
-        informacoes_dht1.temperature().getSensor(&sensor);
+    /**
+    * @brief Função responsável por imprimir as informações básicas
+    * @param sensor Objeto sensor_t que armazena as informações básicas do sensor
+    */
+    void imprimir_configuracoes_basicas(sensor_t sensor){
+        // Imprime as informações básicas de temperatura do sensor
+        Serial.println("------------------------------------");
+        Serial.println("Temperatura");
+        Serial.print  ("Sensor:       "); Serial.println(sensor.name);
+        Serial.print  ("Valor max:    "); Serial.print(sensor.max_value); Serial.println(" *C");
+        Serial.print  ("Valor min:    "); Serial.print(sensor.min_value); Serial.println(" *C");
+        Serial.print  ("Resolucao:    "); Serial.print(sensor.resolution); Serial.println(" *C");
+        Serial.println("------------------------------------");
+        
+        // Imprime as informações básicas de umidade do sensor
+        Serial.println("------------------------------------");
+        Serial.println("Umidade");
+        Serial.print  ("Sensor:       "); Serial.println(sensor.name);
+        Serial.print  ("Valor max:    "); Serial.print(sensor.max_value); Serial.println("%");
+        Serial.print  ("Valor min:    "); Serial.print(sensor.min_value); Serial.println("%");
+        Serial.print  ("Resolucao:    "); Serial.print(sensor.resolution); Serial.println("%");
+        Serial.println("------------------------------------");
 
-        // Coleta e imprime as informações básicas de umidade do sensor
-        informacoes_dht1.humidity().getSensor(&sensor);
     }
-    else if(numero_sensor == 2) {
-        // Coleta e imprime as informações básicas de temperatura do sensor
-        dht2.temperature().getSensor(&sensor);
 
-        // Coleta e imprime as informações básicas de umidade do sensor
-        dht2.humidity().getSensor(&sensor);
+    void imprimir_dados(float temperatura, float umidade) {
+        
+        // Tratamento de exceção para o caso de dar erro na leitura da temperatura
+        if (isnan(temperatura)) {
+            Serial.println("Erro na leitura da Temperatura!");
+        }
+
+        // Se não possuir nenhum tipo de erro, imprime a temperatura
+        else{
+            Serial.print("Temperatura: ");
+            Serial.print(temperatura);
+            Serial.println(" *C");
+        }
+
+        // Tratamento de exceção para o caso de dar erro na leitura de umidade
+        if (isnan(umidade)) {
+            Serial.println("Erro na leitura da Umidade!");
+        }
+        
+        // Se não possuir nenhum tipo de erro, imprime a umidade
+        else {
+            Serial.print("Umidade: ");
+            Serial.print(umidade);
+            Serial.println("%");
+        }
+
     }
-    else if(numero_sensor == 3) {
-        // Coleta e imprime as informações básicas de temperatura do sensor
-        dht3.temperature().getSensor(&sensor);
 
-        // Coleta e imprime as informações básicas de umidade do sensor
-        dht3.humidity().getSensor(&sensor);  
+
+};
+
+// Classe que faz todo tratamento dos dados do sensor DHT
+class sensorDHT : impressaoDadosSensorDHT {
+
+    private:
+
+    // Variáveis de controle para ativar/desativar os sensores
+    bool _primeiroSensorDHTAtivado = false;
+    bool _segundoSensorDHTAtivado = false;
+    bool _terceiroSensorDHTAtivado = false;
+
+        
+
+    public:
+
+    // Variáveis para armazenar os valores dos dados
+    float umidade_sensor1;
+    float temperatura_sensor1;
+    
+    float umidade_sensor2;
+    float temperatura_sensor2;
+    
+    float umidade_sensor3;
+    float temperatura_sensor3;
+
+    /**
+    * @brief Função responsável por ativar o sensor que está sendo usado
+    * @param numero_sensor Inteiro que armazena qual o número do sensor que está sendo iniciado
+    */
+    void ativar_sensor_dht(int numeroSensor) {
+        if(numeroSensor == 1) {
+            _primeiroSensorDHTAtivado = true;
+        }
+        else if(numeroSensor == 2) {
+            _segundoSensorDHTAtivado = true;
+        }
+        else if(numeroSensor == 3) {
+            _terceiroSensorDHTAtivado = true;
+        }
     }
-    
-    // Imprime as informações básicas de temperatura do sensor
-    Serial.println("------------------------------------");
-    Serial.println("Temperatura");
-    Serial.print  ("Sensor:       "); Serial.println(sensor.name);
-    Serial.print  ("Valor max:    "); Serial.print(sensor.max_value); Serial.println(" *C");
-    Serial.print  ("Valor min:    "); Serial.print(sensor.min_value); Serial.println(" *C");
-    Serial.print  ("Resolucao:    "); Serial.print(sensor.resolution); Serial.println(" *C");
-    Serial.println("------------------------------------");
-    
-    // Imprime as informações básicas de umidade do sensor
-    Serial.println("------------------------------------");
-    Serial.println("Umidade");
-    Serial.print  ("Sensor:       "); Serial.println(sensor.name);
-    Serial.print  ("Valor max:    "); Serial.print(sensor.max_value); Serial.println("%");
-    Serial.print  ("Valor min:    "); Serial.print(sensor.min_value); Serial.println("%");
-    Serial.print  ("Resolucao:    "); Serial.print(sensor.resolution); Serial.println("%");
-    Serial.println("------------------------------------");
-}
 
+    /**
+    * @brief Função responsável por iniciar os sensores DHT e pegar as informações básicas
+    * @param nome_sensor String que armazena nome do sensor que está sendo iniciado
+    */
+    void iniciar_sensor(String nome_do_sensor, int numero_sensor) {
+        
+        String nome_sensor = nome_do_sensor;
 
-float umidade;
-float temperatura;
+        if (_primeiroSensorDHTAtivado && numero_sensor == 1) {
+            // Imprime qual o sensor que está sendo iniciado
+            Serial.println("Iniciando o ");
+            Serial.print(nome_sensor);
+            
+            // Inicia o sensor
+            dht1.begin();
 
+            // Coleta e imprime as informações básicas de temperatura do sensor
+            informacoes_dht1.temperature().getSensor(&sensor_DHT_de_fora);
 
-/**
- * @brief Função responsável por ler os dados dos sensores DHT
- * @param event Objeto sensor_event_t que armazena os dados do sensor
- * @param nome_sensor String que armazena qual o sensor que está sendo lido
-*/
-void leitura_dos_sensores_DHT(sensors_event_t event, String nome_sensor, int numero_sensor) {
-    
-    delayMS = sensor_DHT_de_fora.min_delay / 1000;
+            // Coleta e imprime as informações básicas de umidade do sensor
+            informacoes_dht1.humidity().getSensor(&sensor_DHT_de_fora);
 
-    // Setando o tempo de atraso para leitura do sensor
-    delay(delayMS);
+            imprimir_configuracoes_basicas(sensor_DHT_de_fora);
+        }
+        
+        if (_segundoSensorDHTAtivado && numero_sensor == 2) {
+            // Imprime qual o sensor que está sendo iniciado
+            Serial.println("Iniciando o ");
+            Serial.print(nome_sensor);
+            
+            // Inicia o sensor
+            dht2.begin();
 
-    // Condicional para verificar qual o sensor que está sendo lido
-    // A partir disso, é feita a leitura do sensor e armazenada no objeto event
-    if(numero_sensor == 1) {
+            // Coleta e imprime as informações básicas de temperatura do sensor
+            informacoes_dht2.temperature().getSensor(&sensor_DHT_de_dentro1);
+
+            // Coleta e imprime as informações básicas de umidade do sensor
+            informacoes_dht2.humidity().getSensor(&sensor_DHT_de_dentro1);
+
+            imprimir_configuracoes_basicas(sensor_DHT_de_dentro1);
+        }
+        
+        if (_terceiroSensorDHTAtivado && numero_sensor == 3) {
+            // Imprime qual o sensor que está sendo iniciado
+            Serial.println("Iniciando o ");
+            Serial.print(nome_sensor);
+            
+            // Inicia o sensor
+            dht3.begin();
+
+            // Coleta e imprime as informações básicas de temperatura do sensor
+            informacoes_dht3.temperature().getSensor(&sensor_DHT_de_dentro2);
+
+            // Coleta e imprime as informações básicas de umidade do sensor
+            informacoes_dht3.humidity().getSensor(&sensor_DHT_de_dentro2);  
+
+            imprimir_configuracoes_basicas(sensor_DHT_de_dentro2);
+        }
+
+    }
+
+    // Função que irá ler os sensores para armazenar os dados obtidos
+    void ler_sensores_dht(){
+        delayMS = sensor_DHT_de_fora.min_delay / 1000;
+
+        // Setando o tempo de atraso para leitura do sensor
+        delay(delayMS);
+
         // dht1.temperature().getEvent(&event);
         // dht1.humidity().getEvent(&event);
 
-        umidade = dht1.readHumidity();
-        temperatura = dht1.readTemperature();
-    }
-    else if(numero_sensor == 2) {
-        dht2.temperature().getEvent(&event);
-        dht2.humidity().getEvent(&event);
-    }
-    else if(numero_sensor == 3) {
-        dht3.temperature().getEvent(&event);
-        dht3.humidity().getEvent(&event); 
+        umidade_sensor1 = dht1.readHumidity();
+        temperatura_sensor1 = dht1.readTemperature();
+
+        umidade_sensor2 = dht2.readHumidity();
+        temperatura_sensor2 = dht2.readTemperature();
+
+        umidade_sensor3 = dht3.readHumidity();
+        temperatura_sensor3 = dht3.readTemperature();
+
     }
 
-    // Tratamento de exceção para o caso de dar erro na leitura da temperatura
-    if (isnan(temperatura)) {
-        Serial.println("Erro na leitura da Temperatura!");
+    // Função para mostrar os dados dos sensores de acordo com os que estão ativados
+    void leitura_sensores_dht() {
+
+        if (!_primeiroSensorDHTAtivado && !_segundoSensorDHTAtivado && !_terceiroSensorDHTAtivado) {
+            // Todos os sensores estão desativados.
+            Serial.print("Todos os sensores estão desativados!");
+
+        } 
+        else if (_primeiroSensorDHTAtivado && !_segundoSensorDHTAtivado && !_terceiroSensorDHTAtivado) {
+            // Apenas o primeiro sensor está ativado.
+            ler_sensores_dht();
+            imprimir_dados(temperatura_sensor1, umidade_sensor1);
+        } 
+        else if (!_primeiroSensorDHTAtivado && _segundoSensorDHTAtivado && !_terceiroSensorDHTAtivado) {
+            // Apenas o segundo sensor está ativado.
+            ler_sensores_dht();
+            imprimir_dados(temperatura_sensor2, umidade_sensor2);
+        } 
+        else if (!_primeiroSensorDHTAtivado && !_segundoSensorDHTAtivado && _terceiroSensorDHTAtivado) {
+            // Apenas o terceiro sensor está ativado.
+            ler_sensores_dht();
+            imprimir_dados(temperatura_sensor3, umidade_sensor3);
+        } 
+        else if (_primeiroSensorDHTAtivado && _segundoSensorDHTAtivado && !_terceiroSensorDHTAtivado) {
+            // O primeiro e o segundo sensor estão ativados.
+            ler_sensores_dht();
+            imprimir_dados(temperatura_sensor1, umidade_sensor1);
+            imprimir_dados(temperatura_sensor2, umidade_sensor2);
+        } 
+        else if (_primeiroSensorDHTAtivado && !_segundoSensorDHTAtivado && _terceiroSensorDHTAtivado) {
+            // O primeiro e o terceiro sensor estão ativados.
+            ler_sensores_dht();
+            imprimir_dados(temperatura_sensor1, umidade_sensor1);
+            imprimir_dados(temperatura_sensor3, umidade_sensor3);
+        } 
+        else if (!_primeiroSensorDHTAtivado && _segundoSensorDHTAtivado && _terceiroSensorDHTAtivado) {
+            // O segundo e o terceiro sensor estão ativados.
+            ler_sensores_dht();
+            imprimir_dados(temperatura_sensor2, umidade_sensor2);
+            imprimir_dados(temperatura_sensor3, umidade_sensor3);
+        } 
+        else if (_primeiroSensorDHTAtivado && _segundoSensorDHTAtivado && _terceiroSensorDHTAtivado) {
+            // Todos os sensores estão ativados.
+            ler_sensores_dht();
+            imprimir_dados(temperatura_sensor1, umidade_sensor1);
+            imprimir_dados(temperatura_sensor2, umidade_sensor2);
+            imprimir_dados(temperatura_sensor3, umidade_sensor3);
+        }
+        
     }
 
-    // Se não possuir nenhum tipo de erro, imprime a temperatura
-    else{
-        Serial.print("Temperatura: ");
-        Serial.print(temperatura);
-        Serial.println(" *C");
-    }
+};
 
-    // Tratamento de exceção para o caso de dar erro na leitura de umidade
-    if (isnan(umidade)) {
-        Serial.println("Erro na leitura da Umidade!");
-    }
-    
-    // Se não possuir nenhum tipo de erro, imprime a umidade
-    else {
-        Serial.print("Umidade: ");
-        Serial.print(umidade);
-        Serial.println("%");
-    }
 
-}
+
+
+

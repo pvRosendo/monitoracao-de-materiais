@@ -11,13 +11,20 @@ String nivel_uv = "00";
  * @brief Função responsável por iniciar o sensor ultravioleta
  * 
 */
-void iniciar_sensor_UV() {
+void iniciar_sensor_UV(bool modo) {
 
-  // Seta o pino do sensor como entrada
-  pinMode(pino_sensor_UV, INPUT);
+  if (modo) { pinMode(pino_sensor_UV, INPUT); }
 
 }
 
+void mostrar_nivel_uv(bool modo){
+  
+  if (modo){
+    Serial.println("************************************");
+    Serial.println("Nível ultravioleta: " + nivel_uv);
+    Serial.println("************************************");
+  }
+}
 
 /**
  * @brief Função responsável por ler o nível ultravioleta
@@ -47,7 +54,5 @@ void ler_sensor_UV(){
   else if (tensao_convertida > 976 && tensao_convertida <= 1079)  nivel_uv = "09";
   else if (tensao_convertida > 1079 && tensao_convertida <= 1170) nivel_uv = "10";
   else nivel_uv = "11";
-
-  
 
 }
