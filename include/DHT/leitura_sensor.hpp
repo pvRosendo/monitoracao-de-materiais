@@ -1,113 +1,14 @@
 /*
-    Arquivo responsável por contar as funções de leitura dos sensores DHT11/DHT22,
+    Arquivo responsável por conter as funções de leitura dos sensores DHT11/DHT22,
     que são utilizados para medir a Umidade e a Temperatura do ambiente.
 
 */
 
-#include <Adafruit_Sensor.h>                       // Biblioteca DHT Sensor Adafruit 
-#include <DHT_U.h>
-#include <DHT.h>
-
-
-// Dependendo do tipo, selecione um sensor retirando o comentário (duas barras "//") da linha correspondente
-
-// Se os sensores forem do tipo DHT11
-#define DHTTYPE1     DHT11                       // Sensor DHT11
-#define DHTTYPE2     DHT22                       // Sensor DHT22
-#define DHTTYPE3     DHT22                       // Sensor DHT22
-
-// Definição dos pinos que serão utilizados para os sensores
-#define DHTPIN1 2
-#define DHTPIN2 3
-#define DHTPIN3 4
-
-// Instanciando os objetos e configurando os sensores com o pino e o tipo
-DHT dht1(DHTPIN1, DHTTYPE1);
-DHT_Unified informacoes_dht1(DHTPIN1, DHTTYPE1);
-
-DHT dht2(DHTPIN2, DHTTYPE2);
-DHT_Unified informacoes_dht2(DHTPIN2, DHTTYPE2);
-
-DHT dht3(DHTPIN3, DHTTYPE3);
-DHT_Unified informacoes_dht3(DHTPIN3, DHTTYPE3);
-
-
-// Tempo de atraso para leitura do sensor
-uint32_t delayMS;
-
-// Instanciando o objeto sensor para armazenar os dados do sensor
-sensor_t sensor_DHT_de_fora;
-sensor_t sensor_DHT_de_dentro1;
-sensor_t sensor_DHT_de_dentro2;
-
-// Instanciando os objetos de eventos para armazenar as leituras dos sensores
-sensors_event_t evento_DHT_de_fora;
-sensors_event_t evento_DHT_de_dentro1;
-sensors_event_t evento_DHT_de_dentro2;
-
-// Classe exclusiva para manter os métodos de impressão de dados
-class impressaoDadosSensorDHT {
-
-    protected:
-
-    /**
-    * @brief Função responsável por imprimir as informações básicas
-    * @param sensor Objeto sensor_t que armazena as informações básicas do sensor
-    */
-    void imprimir_configuracoes_basicas(sensor_t sensor){
-        // Imprime as informações básicas de temperatura do sensor
-        Serial.println("------------------------------------");
-        Serial.println("Temperatura");
-        Serial.print  ("Sensor:       "); Serial.println(sensor.name);
-        Serial.print  ("Valor max:    "); Serial.print(sensor.max_value); Serial.println(" *C");
-        Serial.print  ("Valor min:    "); Serial.print(sensor.min_value); Serial.println(" *C");
-        Serial.print  ("Resolucao:    "); Serial.print(sensor.resolution); Serial.println(" *C");
-        Serial.println("------------------------------------");
-        
-        // Imprime as informações básicas de umidade do sensor
-        Serial.println("------------------------------------");
-        Serial.println("Umidade");
-        Serial.print  ("Sensor:       "); Serial.println(sensor.name);
-        Serial.print  ("Valor max:    "); Serial.print(sensor.max_value); Serial.println("%");
-        Serial.print  ("Valor min:    "); Serial.print(sensor.min_value); Serial.println("%");
-        Serial.print  ("Resolucao:    "); Serial.print(sensor.resolution); Serial.println("%");
-        Serial.println("------------------------------------");
-
-    }
-
-    void imprimir_dados(float temperatura, float umidade) {
-        
-        // Tratamento de exceção para o caso de dar erro na leitura da temperatura
-        if (isnan(temperatura)) {
-            Serial.println("Erro na leitura da Temperatura!");
-        }
-
-        // Se não possuir nenhum tipo de erro, imprime a temperatura
-        else{
-            Serial.print("Temperatura: ");
-            Serial.print(temperatura);
-            Serial.println(" *C");
-        }
-
-        // Tratamento de exceção para o caso de dar erro na leitura de umidade
-        if (isnan(umidade)) {
-            Serial.println("Erro na leitura da Umidade!");
-        }
-        
-        // Se não possuir nenhum tipo de erro, imprime a umidade
-        else {
-            Serial.print("Umidade: ");
-            Serial.print(umidade);
-            Serial.println("%");
-        }
-
-    }
-
-
-};
+#include "DHT/configs.hpp"
+#include "DHT/init_sensor.hpp"
 
 // Classe que faz todo tratamento dos dados do sensor DHT
-class sensorDHT : impressaoDadosSensorDHT {
+class LEITURA_SENSOR_DHT : CONFIGURAR_SENSOR_DHT {
 
     private:
 

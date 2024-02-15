@@ -1,30 +1,5 @@
-#include <Arduino.h>
+#include "UV/configs.hpp"
 
-// Pino do sensor de UV
-int pino_sensor_UV = A3;
-
-// Variável que armazena o nível ultravioleta de acordo com a tabela
-String nivel_uv = "00";
-
-
-/**
- * @brief Função responsável por iniciar o sensor ultravioleta
- * 
-*/
-void iniciar_sensor_UV(bool modo) {
-
-  if (modo) { pinMode(pino_sensor_UV, INPUT); }
-
-}
-
-void mostrar_nivel_uv(bool modo){
-  
-  if (modo){
-    Serial.println("************************************");
-    Serial.println("Nível ultravioleta: " + nivel_uv);
-    Serial.println("************************************");
-  }
-}
 
 /**
  * @brief Função responsável por ler o nível ultravioleta

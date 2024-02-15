@@ -5,14 +5,17 @@
 
 */
 
-
 // Importando os arquivos necessários
-#include <Arduino.h>
-#include "sensores_DHT.hpp"
-#include "sensor_UV.hpp"
+#include "DHT/configs.hpp"
+#include "DHT/init_sensor.hpp"
+#include "DHT/leitura_sensor.hpp"
+
+#include "UV/configs.hpp"
+#include "UV/init_sensor.hpp"
+#include "UV/leitura_sensor.hpp"
 
 // Objeto para usar as funções do sensor de Umidade e Temperatura
-sensorDHT SENSOR_DHT;
+LEITURA_SENSOR_DHT sensor_DHT;
 
 // Variavel de ativação do sensor de UV (true = ativado, false = desativado)
 bool ativar_sensor_UV = false;
@@ -33,14 +36,14 @@ void setup() {
 
   // Ativar os sensores de Umidade e Temperatura
   // Para desativar algum, basta comentar a linha correspondente
-  SENSOR_DHT.ativar_sensor_dht(1);
-  SENSOR_DHT.ativar_sensor_dht(2);
-  SENSOR_DHT.ativar_sensor_dht(3);
+  sensor_DHT.ativar_sensor_dht(1);
+  sensor_DHT.ativar_sensor_dht(2);
+  sensor_DHT.ativar_sensor_dht(3);
 
   // Iniciando os sensores de Umidade e Temperatura
-  SENSOR_DHT.iniciar_sensor("Sensor de Fora", 1);
-  SENSOR_DHT.iniciar_sensor("Sensor de Dentro 1", 2);
-  SENSOR_DHT.iniciar_sensor("Sensor de Dentro 2", 3);
+  sensor_DHT.iniciar_sensor("Sensor de Fora", 1);
+  sensor_DHT.iniciar_sensor("Sensor de Dentro 1", 2);
+  sensor_DHT.iniciar_sensor("Sensor de Dentro 2", 3);
 
   // Determina um intervalo de 2 segundos antes de iniciar o código
   delay(2000);
@@ -54,7 +57,7 @@ void loop() {
   delay(2000);
   
   // Chama as funções de leitura dos sensores de Umidade e Temperatura
-  SENSOR_DHT.leitura_sensores_dht();
+  sensor_DHT.leitura_sensores_dht();
 
   // Chama a função de leitura do sensor de UV
   ler_sensor_UV();
