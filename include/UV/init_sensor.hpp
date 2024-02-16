@@ -1,5 +1,6 @@
 #include "UV/configs.hpp"
 
+#ifdef SENSOR_UV
 
 /**
  * @brief Função responsável por iniciar o sensor ultravioleta
@@ -19,3 +20,5 @@ void mostrar_nivel_uv(bool modo){
     Serial.println("************************************");
   }
 }
+
+#endif

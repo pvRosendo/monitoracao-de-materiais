@@ -1,5 +1,6 @@
 #include "UV/configs.hpp"
 
+#ifdef SENSOR_UV
 
 /**
  * @brief Função responsável por ler o nível ultravioleta
@@ -31,3 +32,5 @@ void ler_sensor_UV(){
   else nivel_uv = "11";
 
 }
+
+#endif

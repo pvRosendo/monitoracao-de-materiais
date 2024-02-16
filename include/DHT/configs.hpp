@@ -9,6 +9,7 @@
 #include <DHT_U.h>
 #include <DHT.h>
 
+#ifdef SENSOR_DHT
 
 // Dependendo do tipo, selecione um sensor retirando o comentário (duas barras "//") da linha correspondente
 
@@ -45,3 +46,5 @@ sensor_t sensor_DHT_de_dentro2;
 sensors_event_t evento_DHT_de_fora;
 sensors_event_t evento_DHT_de_dentro1;
 sensors_event_t evento_DHT_de_dentro2;
+
+#endif

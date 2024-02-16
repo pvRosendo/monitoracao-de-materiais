@@ -6,6 +6,7 @@
 
 #include "DHT/configs.hpp"
 
+#ifdef SENSOR_DHT
 
 // Classe exclusiva para manter os métodos de impressão de dados
 class CONFIGURAR_SENSOR_DHT {
@@ -62,8 +63,7 @@ class CONFIGURAR_SENSOR_DHT {
             Serial.print(umidade);
             Serial.println("%");
         }
-
     }
-
-
 };
+
+#endif

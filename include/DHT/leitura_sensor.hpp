@@ -7,6 +7,9 @@
 #include "DHT/configs.hpp"
 #include "DHT/init_sensor.hpp"
 
+
+#ifdef SENSOR_DHT
+
 // Classe que faz todo tratamento dos dados do sensor DHT
 class LEITURA_SENSOR_DHT : CONFIGURAR_SENSOR_DHT {
 
@@ -176,13 +179,8 @@ class LEITURA_SENSOR_DHT : CONFIGURAR_SENSOR_DHT {
             imprimir_dados(temperatura_sensor1, umidade_sensor1);
             imprimir_dados(temperatura_sensor2, umidade_sensor2);
             imprimir_dados(temperatura_sensor3, umidade_sensor3);
-        }
-        
+        }   
     }
-
 };
 
-
-
-
-
+#endif
