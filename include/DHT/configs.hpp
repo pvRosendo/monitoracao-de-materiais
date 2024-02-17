@@ -3,13 +3,13 @@
     os arquivos gerais dos sensores DHT11/DHT22
     
 */
+#ifdef SENSOR_DHT
 
 
 #include <Adafruit_Sensor.h>                       // Biblioteca DHT Sensor Adafruit 
 #include <DHT.h>
 #include <DHT_U.h>
 
-// Dependendo do tipo, selecione um sensor retirando o comentário (duas barras "//") da linha correspondente
 
 // Define os tipos dos sensores - para trocar de sensor basta apenas colocar DHT11
 #define DHTTYPE1     DHT22
@@ -35,3 +35,5 @@ DHT_Unified informacoesDHT3(DHTPIN3, DHTTYPE3);
 sensor_t sensor1;
 sensor_t sensor2;
 sensor_t sensor3;
+
+#endif

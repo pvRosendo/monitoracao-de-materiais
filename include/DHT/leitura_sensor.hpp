@@ -3,12 +3,12 @@
     que são utilizados para medir a Umidade e a Temperatura do ambiente.
 
 */
+#ifdef SENSOR_DHT
 
 #include "DHT/configs.hpp"
 #include "DHT/init_sensor.hpp"
 
 
-#ifdef SENSOR_DHT
 
 void leituraSensor(DHT dht, int numeroSensor){
 

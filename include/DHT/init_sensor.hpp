@@ -1,12 +1,12 @@
 /*
     Arquivo responsável por conter as funções iniciais de configuração dos sensores DHT11/DHT22
 */
+#ifdef SENSOR_DHT
 
 
 
 #include "DHT/configs.hpp"
 
-#ifdef SENSOR_DHT
 
 void iniciarSensores(){
     dht1.begin();
