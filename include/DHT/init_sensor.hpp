@@ -4,14 +4,10 @@
 #ifdef SENSOR_DHT
 
 
-
-#include "DHT/configs.hpp"
-
-
-void iniciarSensores(){
-    dht1.begin();
-    dht2.begin();
-    dht3.begin();
+void iniciarSensoresDHT(){
+  dht1.begin();
+  dht2.begin();
+  dht3.begin();
 }
 
 
