@@ -1,8 +1,7 @@
 /*
-    Arquivo responsável por conter as funções de leitura dos sensores DHT11/DHT22,
-    que são utilizados para medir a Umidade e a Temperatura do ambiente.
-
+  Arquivo responsável por conter as funções de leitura dos sensores DHT11/DHT22.
 */
+
 #ifdef SENSOR_DHT
 
 #include "DHT/configs.hpp"

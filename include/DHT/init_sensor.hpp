@@ -1,5 +1,5 @@
 /*
-    Arquivo responsável por conter as funções iniciais de configuração dos sensores DHT11/DHT22
+  Arquivo responsável por conter as funções iniciais de configuração dos sensores DHT11/DHT22
 */
 #ifdef SENSOR_DHT
 

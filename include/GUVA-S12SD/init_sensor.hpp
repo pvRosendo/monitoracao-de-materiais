@@ -1,3 +1,7 @@
+/*
+  Arquivo responsável por conter as funções iniciais de configuração do sensor GUVA-S12SD
+*/
+
 #ifdef SENSOR_UV
 
 #include <Arduino.h>

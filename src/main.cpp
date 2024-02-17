@@ -1,9 +1,3 @@
-/*
-  Arquivo: main.cpp
-
-  Responsável por conter a base do projeto, ou seja, o código principal.
-
-*/
 
 #include <Arduino.h>
 

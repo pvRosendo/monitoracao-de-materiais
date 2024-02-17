@@ -1,3 +1,8 @@
+/*
+  Arquivo responsável por conter as funções de leitura do sensor GUVA-S12SD.
+*/
+
+
 #ifdef SENSOR_UV
 
 #include "GUVA-S12SD/init_sensor.hpp"

@@ -3,6 +3,7 @@
     os arquivos gerais dos sensores DHT11/DHT22
     
 */
+
 #ifdef SENSOR_DHT
 
 
