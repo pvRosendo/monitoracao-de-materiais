@@ -2,7 +2,7 @@
 
 ## Descrição
 
-Este projeto foi feito visando ajudar a desenvolver um modelo de monitoração do envelhecimento de materiais. Para isso, este código serve para monitorar alguns parâmetros como: **umidade relativa**, **temperatura**, **índice de aquecimento**, **índice UV**, entre outros.
+Este projeto foi feito visando o desenvolvimento de um modelo de monitoração do envelhecimento de materiais. O mesmo consistia em uma caixa especializada com três sensores DHT e um sensor Ultravioleta para o monitoramento de quadros de artes que estariam em condições de exposição e sujeitos a envelhecimento característico. Para isso, este código serve para monitorar alguns parâmetros como: **umidade relativa**, **temperatura**, **índice de aquecimento**, **índice UV**, entre outros.
 
 ## Tecnologias
 
@@ -22,11 +22,29 @@ Na wiki do projeto você encontra dados específicos de cada sensor utilizado al
 
 ### Através do VSCode/PlatformIO
 
+1. Instale o VSCode: https://code.visualstudio.com/download
+2. Instale o PlatformIO: https://platformio.org/platformio-ide
+3. Abra o projeto e selecione o ambiente de operação desejado. Estão disponíveis:
+```
+- SENSOR_DHT: leitura apenas do sensor DHT;
+- SENSOR_UV: leitura apenas do sensor UV;
+- GERAL: leitura de ambos os sensores.
+```
+4. Faça o upload do projeto para o módulo do Arduíno.
 
 ### Através do Arduino IDE
 
+Não tenho certeza se funcionaria a exata estrutura do PlatformIO para a IDE do Arduino por conta da versatilidade de ambientes e configurações. No momento não tenho pretensão de procurar uma forma para isso, mas quem sabe no futuro.
 
+Como indicação diria para pegar a base e estrutura do código e incorporar a mão.
 
+Segue um link que pode ajudar a verificar tal possível conversão:
+
+- https://community.platformio.org/t/make-platformio-project-compatible-with-arduino-ide/3368
+
+## Sugestões e correções
+
+Em qualquer caso de sugestão ou correção de problema, fique a vontade para identificar e evidenciar. Ficarei imensamente grato.
 
 ## Referências
 

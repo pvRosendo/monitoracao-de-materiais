@@ -1,3 +1,10 @@
+/*
+
+Autor: Paulo Vitor Rosendo
+GitHub: https://github.com/pvRosendo/monitoracao-de-materiais
+
+*/
+
 
 #include <Arduino.h>
 
