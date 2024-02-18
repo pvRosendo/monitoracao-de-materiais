@@ -22,9 +22,10 @@ Na wiki do projeto você encontra dados específicos de cada sensor utilizado al
 
 ### Através do VSCode/PlatformIO
 
-1. Instale o VSCode: https://code.visualstudio.com/download
-2. Instale o PlatformIO: https://platformio.org/platformio-ide
-3. Abra o projeto e selecione o ambiente de operação desejado. Estão disponíveis:
+1. Instale o VSCode: https://code.visualstudio.com/download ;
+2. Instale o PlatformIO: https://platformio.org/platformio-ide ;
+3. Clone o projeto;
+4. Abra o projeto a partir do VSCode e selecione o ambiente de operação desejado (garanta que o platformIO esteja iniciado e funcional). Estão disponíveis:
 ```
 - SENSOR_DHT: leitura apenas do sensor DHT;
 - SENSOR_UV: leitura apenas do sensor UV;
@@ -34,13 +35,11 @@ Na wiki do projeto você encontra dados específicos de cada sensor utilizado al
 
 ### Através do Arduino IDE
 
-Não tenho certeza se funcionaria a exata estrutura do PlatformIO para a IDE do Arduino por conta da versatilidade de ambientes e configurações. No momento não tenho pretensão de procurar uma forma para isso, mas quem sabe no futuro.
+- Neste meu outro repositório você encontrará o projeto na versão de sketch para incorporar a Arduino IDE.
 
-Como indicação diria para pegar a base e estrutura do código e incorporar a mão.
+Link: https://github.com/pvRosendo/arduinoIDE-monitoracao-materiais
 
-Segue um link que pode ajudar a verificar tal possível conversão:
-
-- https://community.platformio.org/t/make-platformio-project-compatible-with-arduino-ide/3368
+Lá você encontrará as informações necessárias para executar o projeto.
 
 ## Sugestões e correções
 
